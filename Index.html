@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rifa Solidaria</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E%F0%9F%8E%9F%3C/text%3E%3C/svg%3E">
+<meta name="theme-color" content="#0E4D45">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --pino:#0E4D45; --pino-2:#0A3A34; --pino-3:#E1EEEA;
+  --maiz:#F4B63F; --maiz-2:#FFE6AE;
+  --hueso:#F1F5F2; --papel:#FFFFFF; --tinta:#17231F; --gris:#5C6A65; --linea:#D5DDD8;
+  --arcilla:#B8432D; --arcilla-bg:#FBE6E0; --ok:#1E7A4B; --ok-bg:#DCF1E4;
+  --f-titulo:'Bricolage Grotesque',system-ui,sans-serif; --f-texto:'Figtree',system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--hueso);color:var(--tinta);font:400 16px/1.5 var(--f-texto)}
+[hidden]{display:none!important}
+h1,h2,h3{font-family:var(--f-titulo);margin:0;line-height:1.15}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--maiz);outline-offset:2px}
+.muted{color:var(--gris)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* botones */
+.btn{border:0;border-radius:10px;padding:11px 18px;font-weight:600;cursor:pointer;background:var(--pino-3);color:var(--pino);transition:background .15s}
+.btn:hover{background:#CFE3DD}
+.btn.primary{background:var(--pino);color:#fff}
+.btn.primary:hover{background:var(--pino-2)}
+.btn.accent{background:var(--maiz);color:var(--tinta)}
+.btn.accent:hover{background:#EBA923}
+.btn.danger{background:var(--arcilla);color:#fff}
+.btn.ghost{background:transparent;border:1.5px solid var(--linea)}
+.btn.ghost:hover{background:#fff;border-color:var(--pino)}
+.btn.sm{padding:7px 12px;font-size:14px}
+.btn.block{width:100%}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+
+/* formularios */
+.field{display:flex;flex-direction:column;gap:5px;margin-bottom:14px;font-weight:500;font-size:14px}
+.field input,.field select{border:1.5px solid var(--linea);background:#fff;border-radius:10px;padding:11px 12px;font-size:16px;font-weight:400;width:100%}
+.field input:focus{border-color:var(--pino)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+
+/* ===== acceso ===== */
+.auth{min-height:100vh;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);}
+.auth-info{background:var(--pino);color:#fff;padding:48px 40px;display:flex;flex-direction:column;justify-content:center;gap:28px}
+.auth-info .lead{max-width:44ch;margin:0;color:#CFE3DD;font-size:17px}
+.stub{background:var(--maiz);color:var(--tinta);padding:26px 30px;max-width:460px;position:relative;border-radius:18px;
+  -webkit-mask:radial-gradient(circle 13px at 0 52%,#0000 97%,#000) left/51% 100% no-repeat,radial-gradient(circle 13px at 100% 52%,#0000 97%,#000) right/51% 100% no-repeat;
+  mask:radial-gradient(circle 13px at 0 52%,#0000 97%,#000) left/51% 100% no-repeat,radial-gradient(circle 13px at 100% 52%,#0000 97%,#000) right/51% 100% no-repeat}
+.stub-name{font:800 30px/1.1 var(--f-titulo);margin:0 0 4px}
+.stub-range{font:700 46px/1 var(--f-titulo);font-variant-numeric:tabular-nums;margin:6px 0 0;letter-spacing:-.5px}
+.stub-org{margin:2px 0 0;font-size:16px;font-weight:500}
+.brandwrap{display:flex;flex-direction:column;line-height:1.15}
+.brandwrap small{color:#B9D3CC;font-size:12px;font-weight:500}
+.perf{border-top:2.5px dashed rgba(23,35,31,.4);margin:20px -4px 16px}
+.stub-row{display:flex;justify-content:space-between;gap:12px;font-weight:600;flex-wrap:wrap}
+.prog{height:9px;background:rgba(23,35,31,.15);border-radius:99px;overflow:hidden;margin-top:12px}
+.prog i{display:block;height:100%;background:var(--pino);border-radius:99px;width:0;transition:width .6s}
+.auth-card{display:flex;align-items:center;justify-content:center;padding:32px 20px}
+.auth-card>div{width:100%;max-width:430px}
+.seg{display:grid;grid-template-columns:1fr 1fr;background:#E4EAE6;border-radius:12px;padding:4px;margin-bottom:22px}
+.seg button{border:0;background:transparent;padding:10px;border-radius:9px;font-weight:600;cursor:pointer;color:var(--gris)}
+.seg button.on{background:#fff;color:var(--pino);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.auth-card h2{font-size:26px;margin-bottom:6px}
+.link{background:none;border:0;color:var(--pino);font-weight:600;text-decoration:underline;cursor:pointer;padding:8px 0;font-size:15px}
+.hint{font-size:13px;font-weight:400;color:var(--gris)}
+.hint.err{color:var(--arcilla);font-weight:500}
+.segm{display:grid;grid-template-columns:1fr 1fr;background:#E4EAE6;border-radius:12px;padding:4px;margin:12px 0 16px}
+.segm button{border:0;background:transparent;padding:9px;border-radius:9px;font-weight:600;cursor:pointer;color:var(--gris)}
+.segm button.on{background:#fff;color:var(--pino);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.pw{position:relative;display:block}
+.field .pw input{padding-right:92px}
+.pw .eye{position:absolute;right:6px;top:50%;transform:translateY(-50%);border:0;background:none;color:var(--pino);font-weight:600;font-size:14px;cursor:pointer;padding:8px 10px;border-radius:8px}
+.pw .eye:hover{background:var(--pino-3)}
+.field input.bad{border-color:var(--arcilla);background:#FFF8F6}
+.auth-card p.muted{margin:0 0 20px}
+
+/* ===== app ===== */
+.top{background:var(--pino);color:#fff;position:sticky;top:0;z-index:20}
+.top-in{max-width:1100px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 18px}
+.brand{font:800 20px var(--f-titulo)}
+.who{display:flex;align-items:center;gap:10px;font-size:14px}
+.who b{display:block;line-height:1.1}
+.who small{color:#B9D3CC}
+.who .btn{background:rgba(255,255,255,.14);color:#fff}
+.who .btn:hover{background:rgba(255,255,255,.26)}
+.tabs{background:#fff;border-bottom:1px solid var(--linea);overflow-x:auto}
+.tabs-in{max-width:1100px;margin:auto;display:flex;gap:4px;padding:0 12px}
+.tabs button{border:0;background:none;padding:14px 14px;font-weight:600;color:var(--gris);cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap}
+.tabs button.on{color:var(--pino);border-color:var(--maiz)}
+.badge{display:inline-block;min-width:20px;padding:0 6px;margin-left:6px;border-radius:99px;background:var(--arcilla);color:#fff;font-size:12px;line-height:20px;text-align:center}
+main.wrap{max-width:1100px;margin:auto;padding:22px 16px 120px}
+.panel{background:#fff;border:1px solid var(--linea);border-radius:16px;padding:18px}
+.panel+.panel{margin-top:14px}
+.h-row{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.h-row h2{font-size:24px}
+
+/* selector de números */
+.toolbar{display:flex;gap:18px;flex-wrap:wrap;align-items:end;margin-bottom:12px}
+.toolbar .field{margin:0;width:auto}
+.toolbar input{width:130px}
+.pages{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:6px}
+.pages button{flex:none;border:1.5px solid var(--linea);background:#fff;border-radius:99px;padding:6px 12px;font:600 13px var(--f-titulo);font-variant-numeric:tabular-nums;cursor:pointer}
+.pages button.on{background:var(--pino);border-color:var(--pino);color:#fff}
+.pages button .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--maiz);margin-left:6px}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--gris);margin:6px 0 14px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:16px;height:16px;border-radius:5px;border:1.5px solid var(--linea);display:inline-block}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(68px,1fr));gap:8px}
+.num{font:700 15px var(--f-titulo);font-variant-numeric:tabular-nums;padding:11px 0;border-radius:10px;border:1.5px solid var(--linea);background:#fff;cursor:pointer;transition:transform .08s}
+.num:hover:not(:disabled){border-color:var(--pino)}
+.num:active:not(:disabled){transform:scale(.96)}
+.num.sel{background:var(--maiz);border-color:var(--maiz)}
+.num.res{background:repeating-linear-gradient(45deg,var(--arcilla-bg),var(--arcilla-bg) 5px,#fff 5px,#fff 10px);color:var(--arcilla);border-color:#EBC1B6;cursor:not-allowed}
+.num.ven{background:#E4E9E6;color:#97A39D;text-decoration:line-through;border-color:#E4E9E6;cursor:not-allowed}
+.num.mio{background:var(--pino);border-color:var(--pino);color:#fff;text-decoration:none;cursor:default}
+.num.mio.res{opacity:.6;background:var(--pino)}
+.num.flash{animation:flash 1.2s 2}
+@keyframes flash{50%{box-shadow:0 0 0 5px var(--maiz)}}
+.legend .l-lib{background:#fff}.legend .l-sel{background:var(--maiz);border-color:var(--maiz)}
+.legend .l-res{background:repeating-linear-gradient(45deg,var(--arcilla-bg),var(--arcilla-bg) 3px,#fff 3px,#fff 6px);border-color:#EBC1B6}
+.legend .l-ven{background:#E4E9E6;border-color:#E4E9E6}.legend .l-mio{background:var(--pino);border-color:var(--pino)}
+
+.bar{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--linea);box-shadow:0 -6px 20px rgba(0,0,0,.07);z-index:15}
+.bar-in{max-width:1100px;margin:auto;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.bar b{font:800 20px var(--f-titulo)}
+
+/* chips */
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.tk{font:700 14px var(--f-titulo);font-variant-numeric:tabular-nums;background:var(--maiz-2);border-radius:8px;padding:3px 9px}
+.tk button{border:0;background:none;cursor:pointer;margin-left:4px;font-weight:700;color:var(--gris)}
+.chip{display:inline-block;border-radius:99px;padding:3px 12px;font-size:13px;font-weight:600}
+.chip.res{background:var(--maiz-2);color:#7A5200}.chip.ok{background:var(--ok-bg);color:var(--ok)}.chip.no{background:var(--arcilla-bg);color:var(--arcilla)}
+
+/* tarjetas de compra */
+.cards{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(min(100%,420px),1fr))}
+.card{background:#fff;border:1px solid var(--linea);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.card header{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.card header b{font:800 18px var(--f-titulo)}
+.meta{font-size:14px;color:var(--gris);display:grid;gap:2px}
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto}
+.stats{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+.stat{background:#fff;border:1px solid var(--linea);border-radius:14px;padding:16px}
+.stat b{display:block;font:800 30px var(--f-titulo);font-variant-numeric:tabular-nums}
+.stat span{color:var(--gris);font-size:14px}
+.empty{text-align:center;padding:44px 16px}
+.empty h3{font-size:22px;margin-bottom:6px}
+
+/* diálogos */
+dialog{border:0;border-radius:18px;padding:0;width:min(560px,94vw);max-height:92vh;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+dialog::backdrop{background:rgba(10,30,26,.55)}
+.dlg{padding:22px;overflow:auto;max-height:92vh}
+.dlg h3{font-size:22px;margin-bottom:10px}
+.dlg .foot{display:flex;justify-content:flex-end;gap:8px;margin-top:16px;flex-wrap:wrap}
+.pay{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.pay label{border:1.5px solid var(--linea);border-radius:12px;padding:12px;cursor:pointer;font-weight:600;display:flex;gap:8px;align-items:center}
+.pay input{accent-color:var(--pino)}
+.pay label:has(input:checked){border-color:var(--pino);background:var(--pino-3)}
+.total{display:flex;justify-content:space-between;align-items:center;background:var(--pino-3);border-radius:12px;padding:12px 14px;margin:12px 0}
+.total b{font:800 24px var(--f-titulo)}
+.qr{display:block;max-width:220px;width:100%;margin:10px auto;border-radius:12px;border:1px solid var(--linea)}
+.qrbox{margin:6px 0 0;text-align:center}
+.qrbox .qr{max-width:260px;background:#fff;padding:6px}
+.qrbox figcaption{font-size:14px;color:var(--gris)}
+.acct{background:var(--hueso);border-radius:12px;padding:6px 14px}
+.acct>div{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:9px 0;border-bottom:1px solid var(--linea)}
+.acct>div:last-child{border-bottom:0}
+.acct span{color:var(--gris);font-size:14px;min-width:130px}
+.acct b{font-size:16px;word-break:break-all;flex:1}
+.field textarea{border:1.5px solid var(--linea);background:#fff;border-radius:10px;padding:11px 12px;font:inherit;font-size:16px;font-weight:400;width:100%;resize:vertical}
+.note{background:#F7F9F8;border-radius:10px;padding:10px 12px;font-size:14px;color:var(--gris);white-space:pre-line}
+.prev{max-width:100%;max-height:200px;border-radius:10px;margin-top:8px;display:block}
+.ver img{width:100%;border-radius:10px}
+
+#toast{position:fixed;left:50%;bottom:92px;transform:translateX(-50%) translateY(20px);background:var(--tinta);color:#fff;padding:12px 18px;border-radius:12px;opacity:0;pointer-events:none;transition:.25s;z-index:60;max-width:92vw;text-align:center}
+#toast.show{opacity:1;transform:translateX(-50%)}
+#toast.err{background:var(--arcilla)}#toast.ok{background:var(--ok)}
+
+@media (max-width:860px){
+  .auth{grid-template-columns:1fr}
+  .auth-info{padding:28px 20px}
+  .stub-range{font-size:38px}
+}
+@media (max-width:520px){
+  .two,.pay{grid-template-columns:1fr}
+  .who small{display:none}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(60px,1fr));gap:6px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="toast" role="status" aria-live="polite"></div>
+<div id="errBox" hidden style="position:fixed;top:0;left:0;right:0;z-index:99;background:#B8432D;color:#fff;padding:10px 14px;font-size:14px"></div>
+<div id="splash" style="min-height:100vh;display:flex;align-items:center;justify-content:center;font:600 18px var(--f-titulo);color:#0E4D45">Cargando…</div>
+
+<!-- ============ ACCESO ============ -->
+<div id="auth" class="auth" hidden>
+  <section class="auth-info">
+    <div class="stub">
+      <p class="stub-name" id="stubName">Rifa Solidaria</p>
+      <p class="stub-org">Organiza: <b id="stubOrg">Club de Leones de Minero</b></p>
+      <p class="stub-range">0001 a 4000</p>
+      <div class="perf"></div>
+      <div class="stub-row"><span id="stubPrice">Bs 10 por ticket</span><span id="stubLeft"></span></div>
+      <div class="prog" aria-hidden="true"><i id="stubProg"></i></div>
+    </div>
+    <p class="lead" id="stubDesc"></p>
+  </section>
+  <section class="auth-card">
+    <div>
+      <div class="seg" role="tablist">
+        <button type="button" class="on" data-f="login" role="tab">Ingresar</button>
+        <button type="button" data-f="reg" role="tab">Crear cuenta</button>
+      </div>
+
+      <form id="fLogin" autocomplete="on">
+        <h2>Bienvenido</h2>
+        <p class="muted">Ingresa para elegir tus números y ver tus tickets.</p>
+        <label class="field">Correo o usuario<input id="lEmail" name="username" autocomplete="username" required></label>
+        <label class="field">Contraseña<input id="lPass" type="password" autocomplete="current-password" required></label>
+        <button class="btn primary block" type="submit">Ingresar</button>
+        <p style="text-align:center;margin:10px 0 0"><button type="button" class="link" id="lnkRec">¿Olvidaste tu contraseña?</button></p>
+      </form>
+
+      <form id="fReg" hidden novalidate>
+        <h2>Crea tu cuenta</h2>
+        <p class="muted">Necesitamos tus datos para registrar tu compra.</p>
+        <div class="two">
+          <label class="field">Nombre<input id="rNom" autocomplete="given-name" required maxlength="40"></label>
+          <label class="field">Apellido<input id="rApe" autocomplete="family-name" required maxlength="40"></label>
+        </div>
+        <div class="two">
+          <label class="field">Carnet de identidad *<input id="rCi" required maxlength="14" inputmode="text" autocapitalize="characters" placeholder="1234567 o 1234567-1A"><span class="hint" id="rCiH" data-ok="Solo números, con complemento opcional (ej. 1234567-1A)">Solo números, con complemento opcional (ej. 1234567-1A)</span></label>
+          <label class="field">Celular<input id="rCel" type="tel" autocomplete="tel" required maxlength="15" inputmode="tel"></label>
+        </div>
+        <label class="field">Correo electrónico *<input id="rMail" type="email" autocomplete="email" inputmode="email" autocapitalize="none" required maxlength="80" placeholder="nombre@gmail.com"><span class="hint" id="rMailH" data-ok="Lo usaremos para recuperar tu contraseña">Lo usaremos para recuperar tu contraseña</span></label>
+        <div class="two">
+          <label class="field">Contraseña<input id="rPass" type="password" autocomplete="new-password" required minlength="6"></label>
+          <label class="field">Repite la contraseña<input id="rPass2" type="password" autocomplete="new-password" required minlength="6"></label>
+        </div>
+        <button class="btn primary block" type="submit">Crear cuenta e ingresar</button>
+      </form>
+
+      <form id="fRec" hidden novalidate>
+        <h2>Recupera tu contraseña</h2>
+        <div id="recM">
+          <p class="muted">Te enviaremos un código de 6 dígitos al correo con el que te registraste.</p>
+          <div id="recP1">
+            <label class="field">Correo electrónico<input id="recMail" type="email" autocomplete="email" inputmode="email" autocapitalize="none" maxlength="80"></label>
+            <button class="btn primary block" type="submit">Enviar código</button>
+          </div>
+          <div id="recP2" hidden>
+            <label class="field">Código de 6 dígitos<input id="recCode" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="123456"></label>
+            <label class="field">Nueva contraseña<input id="recPass" type="password" autocomplete="new-password"></label>
+            <label class="field">Repite la nueva contraseña<input id="recPass2" type="password" autocomplete="new-password"></label>
+            <button class="btn primary block" type="submit">Cambiar contraseña</button>
+            <p style="text-align:center;margin:6px 0 0"><button type="button" class="link" id="recReenv">Reenviar código</button></p>
+          </div>
+        </div>
+        <p style="text-align:center;margin:10px 0 0"><button type="button" class="link" id="recVolver">Volver a ingresar</button></p>
+      </form>
+    </div>
+  </section>
+</div>
+
+<!-- ============ APLICACIÓN ============ -->
+<div id="app" hidden>
+  <header class="top"><div class="top-in">
+    <span class="brandwrap"><span class="brand" id="brand">Rifa Solidaria</span><small id="brandOrg">Organiza: Club de Leones de Minero</small></span>
+    <div class="who">
+      <div><b id="who"></b><small id="role"></small></div>
+      <button class="btn sm" id="btnOut" type="button">Salir</button>
+    </div>
+  </div></header>
+  <nav class="tabs"><div class="tabs-in" id="tabs"></div></nav>
+  <main class="wrap" id="view"></main>
+</div>
+
+<!-- ============ DIÁLOGOS ============ -->
+<dialog id="dlgPago"><div class="dlg">
+  <h3>Revisa y paga tus tickets</h3>
+  <div id="pagoSel" class="chips"></div>
+  <div class="total"><span>Total a pagar</span><b id="pagoTotal"></b></div>
+  <div class="pay">
+    <label><input type="radio" name="metodo" value="QR" checked> Pago por QR</label>
+    <label><input type="radio" name="metodo" value="TRANSFERENCIA"> Transferencia</label>
+  </div>
+  <div id="pagoInfo"></div>
+  <label class="field" style="margin-top:14px">Número de operación (opcional)<input id="pRef" maxlength="60"></label>
+  <label class="field">Comprobante de pago (imagen)<input id="pFile" type="file" accept="image/*"></label>
+  <img id="pPrev" class="prev" alt="Vista previa del comprobante" hidden>
+  <div class="foot">
+    <button class="btn ghost" type="button" id="pCancel">Seguir eligiendo</button>
+    <button class="btn primary" type="button" id="pSend">Enviar comprobante</button>
+  </div>
+</div></dialog>
+
+<dialog id="dlgVer"><div class="dlg ver">
+  <h3 id="verT">Comprobante</h3>
+  <img id="verImg" alt="Comprobante de pago">
+  <div class="foot"><button class="btn" type="button" id="verClose">Cerrar</button></div>
+</div></dialog>
+
+<dialog id="dlgAsk"><div class="dlg">
+  <h3 id="askT"></h3>
+  <p id="askP" class="muted" style="margin:0 0 10px"></p>
+  <label class="field" id="askL"><input id="askI" maxlength="200"></label>
+  <div class="foot">
+    <button class="btn ghost" type="button" id="askNo">Cancelar</button>
+    <button class="btn primary" type="button" id="askOk">Aceptar</button>
+  </div>
+</div></dialog>
+
+<script>
+/* ===================== utilidades ===================== */
+const $ = s => document.querySelector(s);
+const pad = n => ('0000' + n).slice(-4);
+const bs = n => 'Bs ' + Number(n || 0).toLocaleString('es-BO');
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const msg = e => String((e && e.message) || e).replace(/^Error:\s*/, '');
+const store = {
+  get(k){ try { return sessionStorage.getItem(k); } catch(e){ return null; } },
+  set(k,v){ try { sessionStorage.setItem(k,v); } catch(e){} },
+  del(k){ try { sessionStorage.removeItem(k); } catch(e){} }
+};
+/* ==========================================================================
+   CONFIGURACIÓN: pega aquí la URL de tu aplicación web de Apps Script
+   (Implementar > Administrar implementaciones > URL de la aplicación web,
+   termina en /exec).
+   ========================================================================== */
+const API_URL = 'PEGA_AQUI_LA_URL_DE_TU_APLICACION_WEB_EXEC';
+
+const api = new Proxy({}, { get: (_, fn) => async (...a) => {
+  if (!/^https:\/\/script\.google(usercontent)?\.com\//.test(API_URL)) throw new Error('Falta configurar API_URL al inicio del script de index.html.');
+  let r;
+  try {
+    r = await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ fn, args: a }) });
+  } catch (e) { throw new Error('No hay conexión con el servidor. Revisa tu internet e intenta de nuevo.'); }
+  let j;
+  try { j = await r.json(); }
+  catch (e) { throw new Error('Respuesta inválida del servidor. Verifica que la aplicación web esté implementada con acceso para "Cualquier usuario".'); }
+  if (j.error) { if (String(j.error).includes('SESION_EXPIRADA')) salir(true); throw new Error(j.error); }
+  return j.result;
+} });
+
+let tt;
+function toast(m, type){ const t = $('#toast'); (document.querySelector('dialog[open]') || document.body).appendChild(t); t.textContent = m; t.className = 'show ' + (type || ''); clearTimeout(tt); tt = setTimeout(() => t.className = '', 4500); }
+async function run(btn, fn){
+  if (btn) btn.disabled = true;
+  try { return await fn(); }
+  catch(e){ if (!String(e.message).includes('SESION_EXPIRADA')) toast(msg(e), 'err'); }
+  finally { if (btn) btn.disabled = false; }
+}
+function ask({title, text, ok = 'Aceptar', input = null, danger = false}){
+  return new Promise(res => {
+    const d = $('#dlgAsk'), inp = $('#askI');
+    $('#askT').textContent = title; $('#askP').textContent = text || '';
+    $('#askL').hidden = !input; inp.value = ''; inp.placeholder = input || '';
+    const b = $('#askOk'); b.textContent = ok; b.className = 'btn ' + (danger ? 'danger' : 'primary');
+    let done = false;
+    const end = v => { if (done) return; done = true; if (d.open) d.close(); res(v); };
+    b.onclick = () => end(input ? inp.value.trim() : true);
+    $('#askNo').onclick = () => end(null);
+    d.oncancel = () => end(null);
+    d.showModal();
+  });
+}
+
+/* ===================== estado ===================== */
+const PAGE = 200;
+const S = { token:null, user:null, info:null, mapa:'', sel:new Set(), page:0, tab:null, pago:null, comp:null, resumen:null, lista:[] };
+const EST = { RESERVADO:['En reserva','res'], VALIDADO:['Confirmado','ok'], RECHAZADO:['Rechazado','no'], VENCIDO:['Vencida','no'] };
+const chip = e => `<span class="chip ${(EST[e]||['',''])[1]}">${(EST[e]||[e])[0]}</span>`;
+const tickets = s => String(s||'').split(',').map(x => x.trim()).filter(Boolean).map(x => `<span class="tk">${esc(x)}</span>`).join('');
+
+/* ===================== arranque ===================== */
+function mostrarError(m){ const b = $('#errBox'); if (!b) return; b.textContent = m; b.hidden = false; console.error(m); }
+window.addEventListener('error', ev => mostrarError('Error en la página: ' + ev.message));
+window.addEventListener('unhandledrejection', ev => mostrarError('Error: ' + msg(ev.reason)));
+
+(async function init(){
+  const base = { nombre:'Rifa Solidaria', descripcion:'', precio:10, max:100, total:4000, vendidos:0, reservados:0, disponibles:4000, reservaHoras:0, pais:'591', waMsg:'', organiza:'Club de Leones de Minero' };
+  try {
+    const r = await api.getPublico();
+    S.info = (r && typeof r === 'object') ? r : base;
+  } catch(e){ S.info = base; mostrarError('No se pudo conectar con el servidor: ' + msg(e)); }
+  try { pintarInfo(); } catch(e){ console.error(e); }
+  $('#splash').hidden = true;
+  const t = store.get('rifa_token');
+  if (t) {
+    try { const r = await api.getSesion(t); if (r && r.ok) { S.token = t; S.user = r.user; return entrar(); } } catch(e){}
+    store.del('rifa_token');
+  }
+  $('#auth').hidden = false;
+})();
+
+function pintarInfo(){
+  const i = S.info;
+  document.title = i.nombre;
+  $('#brand').textContent = i.nombre; $('#stubName').textContent = i.nombre;
+  const org = i.organiza || 'Club de Leones de Minero';
+  $('#stubOrg').textContent = org; $('#brandOrg').textContent = 'Organiza: ' + org;
+  $('#stubPrice').textContent = bs(i.precio) + ' por ticket';
+  $('#stubLeft').textContent = i.disponibles + ' disponibles';
+  $('#stubProg').style.width = Math.round((i.vendidos + i.reservados) / i.total * 100) + '%';
+  $('#stubDesc').textContent = i.descripcion;
+}
+
+/* ===================== acceso ===================== */
+document.querySelectorAll('.seg button').forEach(b => b.onclick = () => {
+  document.querySelectorAll('.seg button').forEach(x => x.classList.toggle('on', x === b));
+  $('#fLogin').hidden = b.dataset.f !== 'login'; $('#fReg').hidden = b.dataset.f !== 'reg'; $('#fRec').hidden = true;
+});
+$('#fLogin').addEventListener('submit', e => { e.preventDefault(); const b = e.submitter;
+  run(b, async () => {
+    const r = await api.login($('#lEmail').value, $('#lPass').value);
+    if (!r.ok) return toast(r.error, 'err');
+    S.token = r.token; S.user = r.user; store.set('rifa_token', r.token); entrar();
+  });
+});
+$('#fReg').addEventListener('submit', e => { e.preventDefault(); const b = e.submitter;
+  if (['rNom','rApe','rCel','rPass'].some(id => !$('#' + id).value.trim())) return toast('Completa todos los campos obligatorios.', 'err');
+  const okM = vMail(), okC = vCi();
+  if (!okM || !okC) return toast('Revisa los datos marcados en rojo.', 'err');
+  if ($('#rPass').value.length < 6) return toast('La contraseña debe tener al menos 6 caracteres.', 'err');
+  if ($('#rPass').value !== $('#rPass2').value) return toast('Las contraseñas no coinciden.', 'err');
+  run(b, async () => {
+    const r = await api.registrar({ nombre:$('#rNom').value, apellido:$('#rApe').value, ci:normCi($('#rCi').value),
+      celular:$('#rCel').value, email:$('#rMail').value, password:$('#rPass').value });
+    if (!r.ok) { if (r.campo === 'ci') chk('rCi', false, r.error); if (r.campo === 'email') chk('rMail', false, r.error); return toast(r.error, 'err'); }
+    S.token = r.token; S.user = r.user; store.set('rifa_token', r.token); toast('Cuenta creada. ¡Bienvenido!', 'ok'); entrar();
+  });
+});
+$('#btnOut').onclick = () => salir(false);
+function salir(expirada){
+  if (S.token && !expirada) api.logout(S.token).catch(()=>{});
+  store.del('rifa_token'); S.token = null; S.user = null; S.sel.clear(); S.pago = null;
+  document.querySelectorAll('dialog[open]').forEach(d => d.close());
+  $('#app').hidden = true; $('#auth').hidden = false;
+  api.getPublico().then(i => { S.info = i; pintarInfo(); }).catch(()=>{});
+  if (expirada) toast('Tu sesión venció. Ingresa de nuevo.', 'err');
+}
+
+/* ===================== navegación ===================== */
+async function entrar(){
+  $('#auth').hidden = true; $('#app').hidden = false;
+  const admin = S.user.rol === 'ADMIN';
+  $('#who').textContent = (S.user.nombre + ' ' + (S.user.apellido || '')).trim();
+  $('#role').textContent = admin ? 'Administrador' : 'Cliente';
+  if (admin) { try { S.resumen = await api.adminResumen(S.token); } catch(e){} }
+  pintarTabs();
+  setTab(admin ? 'pend' : 'elegir');
+}
+function pintarTabs(){
+  const admin = S.user.rol === 'ADMIN';
+  const pend = S.resumen && S.resumen.pendientes ? `<span class="badge">${S.resumen.pendientes}</span>` : '';
+  const list = admin
+    ? [['pend','Por validar' + pend],['todas','Compras'],['buscar','Buscar ticket'],['clientes','Clientes'],['pagos','Datos de pago'],['resumen','Resumen'],['cuenta','Mi cuenta']]
+    : [['elegir','Elegir números'],['mis','Mis tickets'],['cuenta','Mi cuenta']];
+  $('#tabs').innerHTML = list.map(([id,l]) => `<button type="button" data-tab="${id}" class="${S.tab===id?'on':''}">${l}</button>`).join('');
+}
+function setTab(id){
+  S.tab = id; S.nav = (S.nav || 0) + 1; pintarTabs(); window.scrollTo(0, 0);
+  const v = { elegir:vElegir, mis:vMis, pend:vPend, todas:vTodas, buscar:vBuscar, clientes:vClientes, pagos:vPagos, resumen:vResumen, cuenta:vCuenta }[id];
+  run(null, v);
+}
+
+/* ===================== validaciones y recuperación ===================== */
+const RE_MAIL = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}$/;
+const RE_CI = /^\d{5,9}(-\d[A-Z])?$/;
+const normCi = v => String(v || '').trim().toUpperCase().replace(/^(\d+)\s+(\d[A-Z])$/, '$1-$2').replace(/\s+/g, '');
+const okMail = v => { v = String(v || '').trim(); return v.length <= 80 && !/\.\./.test(v) && RE_MAIL.test(v); };
+function chk(id, ok, err){
+  const i = $('#' + id), h = $('#' + id + 'H');
+  i.classList.toggle('bad', !ok); i.setAttribute('aria-invalid', ok ? 'false' : 'true');
+  if (h) { h.textContent = ok ? h.dataset.ok : err; h.classList.toggle('err', !ok); }
+  return ok;
+}
+function vMail(){
+  const v = $('#rMail').value.trim();
+  return chk('rMail', okMail(v), v === '' ? 'El correo electrónico es obligatorio.' : 'Correo no válido. Ejemplo: nombre@gmail.com');
+}
+function vCi(){
+  const v = normCi($('#rCi').value);
+  return chk('rCi', RE_CI.test(v), v === '' ? 'El carnet de identidad es obligatorio.' : 'Formato no válido: usa de 5 a 9 dígitos, con complemento opcional (ej. 1234567-1A).');
+}
+document.addEventListener('focusout', e => { if (e.target.id === 'rMail') vMail(); if (e.target.id === 'rCi') vCi(); });
+document.addEventListener('input', e => {
+  if (e.target.id === 'rMail' && e.target.classList.contains('bad')) vMail();
+  if (e.target.id === 'rCi' && e.target.classList.contains('bad')) vCi();
+});
+
+function recPaso(n){ $('#recP1').hidden = n !== 1; $('#recP2').hidden = n !== 2; }
+$('#lnkRec').onclick = () => {
+  $('#fLogin').hidden = true; $('#fReg').hidden = true; $('#fRec').hidden = false;
+  document.querySelector('.seg').hidden = true; recPaso(1);
+  const m = $('#lEmail').value.trim(); $('#recMail').value = m.includes('@') ? m : '';
+};
+$('#recVolver').onclick = () => {
+  $('#fRec').hidden = true; document.querySelector('.seg').hidden = false; $('#fLogin').hidden = false;
+  document.querySelectorAll('.seg button').forEach(x => x.classList.toggle('on', x.dataset.f === 'login'));
+};
+function recEnviar(btn){
+  const mail = $('#recMail').value.trim();
+  if (!okMail(mail)) return toast('Ingresa un correo electrónico válido.', 'err');
+  run(btn, async () => {
+    const r = await api.solicitarRecuperacion(mail);
+    if (!r.ok) return toast(r.error, 'err');
+    toast(r.mensaje, 'ok'); recPaso(2); $('#recCode').focus();
+  });
+}
+$('#recReenv').onclick = e => recEnviar(e.currentTarget);
+$('#fRec').addEventListener('submit', e => {
+  e.preventDefault(); const b = e.submitter;
+  if (!$('#recP2').hidden) {
+    const mail = $('#recMail').value.trim();
+    if (!/^\d{6}$/.test($('#recCode').value.trim())) return toast('Ingresa el código de 6 dígitos.', 'err');
+    if ($('#recPass').value.length < 6) return toast('La nueva contraseña debe tener al menos 6 caracteres.', 'err');
+    if ($('#recPass').value !== $('#recPass2').value) return toast('Las contraseñas no coinciden.', 'err');
+    return run(b, async () => {
+      const r = await api.restablecerPassword(mail, $('#recCode').value.trim(), $('#recPass').value);
+      if (!r.ok) return toast(r.error, 'err');
+      toast('Contraseña actualizada. Ya puedes ingresar.', 'ok');
+      $('#lEmail').value = mail; $('#lPass').value = ''; $('#recCode').value = ''; $('#recPass').value = ''; $('#recPass2').value = '';
+      $('#recVolver').click(); $('#lPass').focus();
+    });
+  }
+  recEnviar(b);
+});
+
+/* ===================== ver / ocultar contraseña ===================== */
+function ojos(root){
+  (root || document).querySelectorAll('input[type=password]:not([data-ojo])').forEach(inp => {
+    inp.dataset.ojo = '1';
+    const w = document.createElement('span'); w.className = 'pw';
+    inp.parentNode.insertBefore(w, inp); w.appendChild(inp);
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'eye'; b.textContent = 'Mostrar';
+    b.setAttribute('aria-label', 'Mostrar contraseña'); b.setAttribute('aria-pressed', 'false');
+    w.appendChild(b);
+  });
+}
+document.addEventListener('click', e => {
+  const b = e.target.closest('.eye'); if (!b) return;
+  const inp = b.parentNode.querySelector('input'), ver = inp.type === 'password';
+  inp.type = ver ? 'text' : 'password';
+  b.textContent = ver ? 'Ocultar' : 'Mostrar';
+  b.setAttribute('aria-label', ver ? 'Ocultar contraseña' : 'Mostrar contraseña');
+  b.setAttribute('aria-pressed', ver ? 'true' : 'false');
+  inp.focus();
+});
+ojos();
+
+/* ===================== admin: clientes ===================== */
+async function vClientes(){
+  $('#view').innerHTML = `<div class="h-row"><h2>Clientes</h2></div>
+    <div class="toolbar"><label class="field">Buscar por nombre, carnet, celular o correo<input id="cQ" style="width:min(340px,80vw)"></label></div>
+    <div id="cList"><p class="muted">Cargando…</p></div>`;
+  const nav = S.nav;
+  const r = await api.adminClientes(S.token);
+  if (nav !== S.nav) return;
+  S.clientes = r.clientes; drawClientes();
+}
+function drawClientes(){
+  const el = $('#cList'); if (!el) return;
+  const q = (($('#cQ') || {}).value || '').toLowerCase().trim();
+  const l = S.clientes.filter(c => !q || (c.nombre + ' ' + c.ci + ' ' + c.celular + ' ' + c.email).toLowerCase().includes(q));
+  el.innerHTML = l.length
+    ? `<div class="cards">${l.slice(0, 200).map(c => `<article class="card">
+        <header><b>${esc(c.nombre)}</b></header>
+        <div class="meta"><span>CI ${esc(c.ci)} · Cel. ${esc(c.celular)}</span><span>${esc(c.email)}</span><span>Registrado el ${esc(c.fecha)}</span></div>
+        <div class="acts"><button class="btn sm primary" data-act="resetpw" data-id="${esc(c.id)}" type="button">Contraseña temporal</button></div>
+      </article>`).join('')}</div>`
+    : '<div class="panel empty"><p class="muted">No hay clientes que coincidan.</p></div>';
+}
+/* ===================== admin: datos de pago ===================== */
+function leerQr(file){
+  return new Promise((ok, no) => {
+    const fr = new FileReader();
+    fr.onerror = () => no(new Error('No se pudo leer la imagen.'));
+    fr.onload = () => {
+      const img = new Image();
+      img.onerror = () => no(new Error('El archivo no es una imagen válida.'));
+      img.onload = () => {
+        const k = Math.min(1, 900 / Math.max(img.width, img.height));
+        const w = Math.round(img.width * k), h = Math.round(img.height * k);
+        const c = document.createElement('canvas'); c.width = w; c.height = h;
+        const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, w, h); x.drawImage(img, 0, 0, w, h);
+        let mime = 'image/png', url = c.toDataURL(mime);
+        if (url.length > 4000000) { mime = 'image/jpeg'; url = c.toDataURL(mime, 0.88); }
+        ok({ url, base64: url.split(',')[1], mime });
+      };
+      img.src = fr.result;
+    };
+    fr.readAsDataURL(file);
+  });
+}
+async function vPagos(){
+  $('#view').innerHTML = '<p class="muted">Cargando…</p>';
+  const nav = S.nav;
+  const r = await api.adminGetPago(S.token);
+  if (nav !== S.nav) return;
+  S.qrNuevo = null;
+  $('#view').innerHTML = `<div class="h-row"><h2>Datos de pago</h2></div>
+    <section class="panel" style="max-width:640px">
+      <p class="muted" style="margin-top:0">Esto es lo que verán los compradores en la ventana de pago.</p>
+      <label class="field">Banco<input id="gBanco" maxlength="60" value="${esc(r.banco)}" placeholder="Ej. Banco Unión"></label>
+      <label class="field">Número de cuenta<input id="gCuenta" maxlength="40" inputmode="numeric" value="${esc(r.cuenta)}" placeholder="Ej. 10000012345678"></label>
+      <label class="field">Titular de la cuenta<input id="gTitular" maxlength="80" value="${esc(r.titular)}" placeholder="Ej. Club de Leones de Minero"></label>
+      <label class="field">Instrucciones adicionales (opcional)<textarea id="gInst" rows="3" maxlength="400">${esc(r.instrucciones)}</textarea></label>
+      <div class="field">Imagen del QR
+        <img id="gQrPrev" class="qr" alt="Vista previa del QR" style="margin:8px 0" ${r.qr ? `src="${esc(r.qr)}"` : 'hidden'}>
+        <span class="hint" id="gQrNone" ${r.qr ? 'hidden' : ''}>Aún no hay un QR cargado.</span>
+        <input id="gQrFile" type="file" accept="image/*">
+        <span class="hint">Sube una imagen nítida del QR de tu banco (PNG o JPG). Si ya hay uno, se reemplaza al guardar.</span>
+      </div>
+      <button class="btn primary" id="gGuardar" type="button">Guardar datos de pago</button>
+    </section>`;
+}
+async function guardarPago(){
+  const d = { banco:$('#gBanco').value, cuenta:$('#gCuenta').value, titular:$('#gTitular').value, instrucciones:$('#gInst').value };
+  if (S.qrNuevo) d.qr = { base64:S.qrNuevo.base64, mime:S.qrNuevo.mime };
+  const r = await api.adminGuardarPago(S.token, d);
+  if (!r.ok) return toast(r.error, 'err');
+  S.pago = null; toast('Datos de pago guardados.', 'ok');
+  await vPagos();
+}
+
+/* un solo manejador de clics para toda la vista */
+document.addEventListener('click', e => {
+  const t = e.target;
+  const tab = t.closest('[data-tab]'); if (tab) return setTab(tab.dataset.tab);
+  const go = t.closest('[data-go]'); if (go) return setTab(go.dataset.go);
+  const n = t.closest('.num'); if (n && !n.disabled) return toggleNum(+n.dataset.n, n);
+  const pg = t.closest('[data-page]'); if (pg) { S.page = +pg.dataset.page; drawPages(); drawGrid(); return; }
+  const act = t.closest('[data-act]'); if (act) return accion(act);
+  if (t.closest('#btnRnd')) return azar();
+  if (t.closest('#btnClear')) { S.sel.clear(); drawGrid(); drawBar(); return; }
+  if (t.closest('#btnPay')) return abrirPago();
+  if (t.closest('#btnBuscar')) return run(t.closest('#btnBuscar'), buscarTicket);
+  if (t.closest('#btnExcel')) return run(t.closest('#btnExcel'), exportarExcel);
+  if (t.closest('#gGuardar')) return run(t.closest('#gGuardar'), guardarPago);
+});
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Enter') return;
+  if (e.target.id === 'goNum') { e.preventDefault(); irA(); }
+  if (e.target.id === 'qNum') { e.preventDefault(); run(null, buscarTicket); }
+});
+document.addEventListener('input', e => {
+  if (e.target.id === 'goNum') { e.target.value = e.target.value.replace(/\D/g,'').slice(0,4); if (e.target.value.length === 4) irA(); }
+  if (e.target.id === 'qTxt') drawLista();
+  if (e.target.id === 'cQ') drawClientes();
+});
+document.addEventListener('change', async e => {
+  if (e.target.id === 'qEstado') run(null, cargarLista);
+  if (e.target.name === 'metodo') drawPagoInfo();
+  if (e.target.id === 'gQrFile') {
+    const f = e.target.files[0]; S.qrNuevo = null; if (!f) return;
+    try {
+      S.qrNuevo = await leerQr(f);
+      const p = $('#gQrPrev'); p.src = S.qrNuevo.url; p.hidden = false;
+      const n = $('#gQrNone'); if (n) n.hidden = true;
+    } catch(err){ e.target.value = ''; toast(msg(err), 'err'); }
+  }
+});
+
+/* ===================== CLIENTE: elegir números ===================== */
+async function vElegir(){
+  $('#view').innerHTML = `
+    <div class="h-row"><h2>Elige tus números</h2><span class="muted">${bs(S.info.precio)} por ticket · hasta ${S.info.max} por compra</span></div>
+    <section class="panel">
+      <div class="toolbar">
+        <label class="field">Ir al número<input id="goNum" inputmode="numeric" maxlength="4" placeholder="0001"></label>
+        <label class="field">Elegir al azar<span class="row"><input id="rndQty" type="number" min="1" max="50" value="5" style="width:80px"><button class="btn ghost" id="btnRnd" type="button">Sumar</button></span></label>
+      </div>
+      <div class="pages" id="pages"></div>
+      <div class="legend">
+        <span><i class="l-lib"></i>Libre</span><span><i class="l-sel"></i>Elegido</span>
+        <span><i class="l-res"></i>En reserva</span><span><i class="l-ven"></i>Vendido</span><span><i class="l-mio"></i>Tuyo</span>
+      </div>
+      <div class="grid" id="grid"><p class="muted">Cargando números…</p></div>
+    </section>
+    <div class="bar" id="bar"></div>`;
+  await refrescarMapa();
+  drawPages(); drawGrid(); drawBar();
+}
+async function refrescarMapa(){
+  const r = await api.getMapa(S.token);
+  S.mapa = r.mapa; S.stats = r;
+  S.sel.forEach(n => { if (S.mapa[n-1] !== '0') S.sel.delete(n); });
+}
+function drawPages(){
+  const el = $('#pages'); if (!el) return;
+  let h = '';
+  for (let p = 0; p * PAGE < S.info.total; p++) {
+    const a = p*PAGE+1, b = Math.min(p*PAGE+PAGE, S.info.total);
+    const has = [...S.sel].some(n => n >= a && n <= b);
+    h += `<button type="button" data-page="${p}" class="${p===S.page?'on':''}">${pad(a)}–${pad(b)}${has?'<span class="dot"></span>':''}</button>`;
+  }
+  el.innerHTML = h;
+  const on = el.querySelector('.on'); if (on && on.scrollIntoView) on.scrollIntoView({block:'nearest', inline:'center'});
+}
+function drawGrid(){
+  const g = $('#grid'); if (!g) return;
+  const from = S.page*PAGE+1, to = Math.min(from+PAGE-1, S.info.total);
+  let h = '';
+  for (let n = from; n <= to; n++) {
+    const st = S.mapa[n-1]; let cls = 'num', dis = '', ttl = '';
+    if (st === '0') { if (S.sel.has(n)) cls += ' sel'; }
+    else if (st === '1') { cls += ' res'; dis = 'disabled'; ttl = 'En reserva'; }
+    else if (st === '2') { cls += ' ven'; dis = 'disabled'; ttl = 'Vendido'; }
+    else if (st === '3') { cls += ' mio res'; dis = 'disabled'; ttl = 'Tuyo, en revisión'; }
+    else { cls += ' mio'; dis = 'disabled'; ttl = 'Tuyo, confirmado'; }
+    h += `<button type="button" class="${cls}" data-n="${n}" ${dis} ${ttl?`title="${ttl}"`:''}>${pad(n)}</button>`;
+  }
+  g.innerHTML = h;
+}
+function toggleNum(n, el){
+  if (S.sel.has(n)) S.sel.delete(n);
+  else { if (S.sel.size >= S.info.max) return toast('El máximo es ' + S.info.max + ' tickets por compra.', 'err'); S.sel.add(n); }
+  el.classList.toggle('sel'); drawBar(); drawPages();
+}
+function drawBar(){
+  const b = $('#bar'); if (!b) return;
+  const n = S.sel.size;
+  b.innerHTML = `<div class="bar-in">
+    <div>${n ? `<b>${n} ticket${n>1?'s':''} · ${bs(n*S.info.precio)}</b>` : '<span class="muted">Toca los números que quieras comprar.</span>'}</div>
+    <div class="row">${n ? '<button class="btn ghost" id="btnClear" type="button">Limpiar</button>' : ''}<button class="btn accent" id="btnPay" type="button" ${n?'':'disabled'}>Revisar y pagar</button></div>
+  </div>`;
+}
+function irA(){
+  const n = parseInt($('#goNum').value, 10);
+  if (!(n >= 1 && n <= S.info.total)) return toast('Ingresa un número entre 0001 y ' + pad(S.info.total) + '.', 'err');
+  S.page = Math.floor((n-1)/PAGE); drawPages(); drawGrid();
+  const b = document.querySelector(`.num[data-n="${n}"]`);
+  if (b) { b.classList.add('flash'); b.scrollIntoView({block:'center'}); }
+}
+function azar(){
+  const q = Math.max(1, Math.min(50, parseInt($('#rndQty').value, 10) || 1));
+  const libres = []; for (let i = 1; i <= S.info.total; i++) if (S.mapa[i-1] === '0' && !S.sel.has(i)) libres.push(i);
+  if (!libres.length) return toast('No quedan números libres.', 'err');
+  let add = 0;
+  while (add < q && libres.length && S.sel.size < S.info.max) { S.sel.add(libres.splice(Math.floor(Math.random()*libres.length),1)[0]); add++; }
+  if (S.sel.size >= S.info.max && add < q) toast('Llegaste al máximo de ' + S.info.max + ' tickets.', 'err');
+  drawPages(); drawGrid(); drawBar();
+}
+
+/* ===================== CLIENTE: pago ===================== */
+async function abrirPago(){
+  if (!S.sel.size) return;
+  if (!S.pago || Date.now() - (S.pagoT || 0) > 300000) { S.pago = await api.getPagoInfo(S.token); S.pagoT = Date.now(); }
+  S.comp = null; $('#pFile').value = ''; $('#pPrev').hidden = true; $('#pRef').value = '';
+  pintarPagoSel();
+  $('#dlgPago').showModal();
+}
+function drawPagoInfo(){
+  const el = $('#pagoInfo'); if (!el || !S.pago) return;
+  const p = S.pago, m = document.querySelector('input[name=metodo]:checked').value, total = bs(S.sel.size * S.info.precio);
+  let h = '';
+  if (m === 'QR') {
+    h += p.qr
+      ? `<figure class="qrbox"><img class="qr" src="${esc(p.qr)}" alt="Código QR para pagar"><figcaption>Escanea este QR con la app de tu banco y paga <b>${total}</b>.</figcaption><a class="link" href="${esc(p.qr)}" download="qr-pago.${p.qr.indexOf('data:image/png') === 0 ? 'png' : 'jpg'}">Descargar imagen del QR</a></figure>`
+      : '<div class="note">El organizador aún no cargó el código QR. Elige la opción "Transferencia".</div>';
+  } else {
+    const filas = [['Banco', p.banco], ['Titular', p.titular]].filter(x => x[1]);
+    if (!filas.length && !p.cuenta) h += '<div class="note">El organizador aún no registró los datos de la cuenta.</div>';
+    else h += `<div class="acct">${filas.map(([k, v]) => `<div><span>${k}</span><b>${esc(v)}</b></div>`).join('')}
+      ${p.cuenta ? `<div><span>Número de cuenta</span><b>${esc(p.cuenta)}</b><button type="button" class="btn sm" data-act="copiar" data-v="${esc(p.cuenta)}">Copiar</button></div>` : ''}
+      <div><span>Monto a transferir</span><b>${total}</b></div></div>`;
+  }
+  if (p.instrucciones) h += `<div class="note" style="margin-top:10px">${esc(p.instrucciones)}</div>`;
+  if (S.info.reservaHoras > 0) h += `<p class="muted" style="font-size:14px;margin:10px 0 0">Si el pago no se valida en ${S.info.reservaHoras} horas, tus números vuelven a quedar disponibles.</p>`;
+  el.innerHTML = h;
+}
+function copiar(t){
+  const fin = () => toast('Número de cuenta copiado.', 'ok');
+  const viejo = () => {
+    const x = document.createElement('textarea'); x.value = t; x.style.cssText = 'position:fixed;opacity:0';
+    (document.querySelector('dialog[open]') || document.body).appendChild(x); x.select();
+    try { document.execCommand('copy'); fin(); } catch(e){ toast('Copia el número manualmente: ' + t, 'err'); }
+    x.remove();
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(fin).catch(viejo); else viejo();
+}
+function pintarPagoSel(){
+  const arr = [...S.sel].sort((a,b) => a-b);
+  $('#pagoSel').innerHTML = arr.map(n => `<span class="tk">${pad(n)}<button type="button" data-act="quitar" data-n="${n}" aria-label="Quitar ${pad(n)}">×</button></span>`).join('');
+  $('#pagoTotal').textContent = bs(arr.length * S.info.precio);
+  drawPagoInfo();
+}
+$('#pCancel').onclick = () => { $('#dlgPago').close(); drawBar(); drawGrid(); drawPages(); };
+$('#pFile').addEventListener('change', async e => {
+  const f = e.target.files[0]; S.comp = null; $('#pPrev').hidden = true;
+  if (!f) return;
+  if (!/^image\//.test(f.type)) { e.target.value = ''; return toast('Adjunta una imagen (captura o foto del comprobante).', 'err'); }
+  try { S.comp = await leerImagen(f); $('#pPrev').src = S.comp.url; $('#pPrev').hidden = false; }
+  catch(err){ e.target.value = ''; toast(msg(err), 'err'); }
+});
+function leerImagen(file){
+  return new Promise((ok, no) => {
+    const fr = new FileReader();
+    fr.onerror = () => no(new Error('No se pudo leer la imagen.'));
+    fr.onload = () => {
+      const img = new Image();
+      img.onerror = () => no(new Error('El archivo no es una imagen válida.'));
+      img.onload = () => {
+        const k = Math.min(1, 1400 / Math.max(img.width, img.height));
+        const w = Math.round(img.width*k), h = Math.round(img.height*k);
+        const c = document.createElement('canvas'); c.width = w; c.height = h;
+        const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0,0,w,h); x.drawImage(img,0,0,w,h);
+        const url = c.toDataURL('image/jpeg', 0.78);
+        ok({ url, base64: url.split(',')[1], mime: 'image/jpeg' });
+      };
+      img.src = fr.result;
+    };
+    fr.readAsDataURL(file);
+  });
+}
+$('#pSend').onclick = e => {
+  if (!S.comp) return toast('Adjunta el comprobante de pago.', 'err');
+  const btn = e.currentTarget;
+  run(btn, async () => {
+    const r = await api.crearCompra(S.token, {
+      numeros: [...S.sel], metodo: document.querySelector('input[name=metodo]:checked').value,
+      referencia: $('#pRef').value, comprobante: { base64: S.comp.base64, mime: S.comp.mime }
+    });
+    if (!r.ok) {
+      toast(r.error, 'err');
+      if (r.ocupados) { await refrescarMapa(); if (!S.sel.size) $('#dlgPago').close(); else pintarPagoSel(); drawGrid(); drawBar(); drawPages(); }
+      return;
+    }
+    $('#dlgPago').close(); S.sel.clear();
+    toast('Compra ' + r.idCompra + ' enviada. Tus números quedan en reserva hasta que validemos el pago.', 'ok');
+    setTab('mis');
+  });
+};
+
+/* ===================== CLIENTE: mis tickets ===================== */
+async function vMis(){
+  $('#view').innerHTML = '<p class="muted">Cargando tus tickets…</p>';
+  const nav = S.nav;
+  const r = await api.misCompras(S.token);
+  if (nav !== S.nav) return;
+  const sum = est => r.compras.filter(c => c.estado === est).reduce((a,c) => a + c.cantidad, 0);
+  if (!r.compras.length) {
+    $('#view').innerHTML = `<div class="panel empty"><h3>Aún no tienes tickets</h3><p class="muted">Elige tus números y envía tu comprobante de pago.</p><button class="btn primary" data-go="elegir" type="button">Elegir números</button></div>`;
+    return;
+  }
+  $('#view').innerHTML = `
+    <div class="h-row"><h2>Mis tickets</h2></div>
+    <div class="stats" style="margin-bottom:16px">
+      <div class="stat"><b>${sum('VALIDADO')}</b><span>Tickets confirmados</span></div>
+      <div class="stat"><b>${sum('RESERVADO')}</b><span>En reserva, esperando validación</span></div>
+    </div>
+    <div class="cards">${r.compras.map(c => `
+      <article class="card">
+        <header><b>${esc(c.id)}</b>${chip(c.estado)}</header>
+        <div class="chips">${tickets(c.tickets)}</div>
+        <div class="meta"><span>${c.cantidad} ticket${c.cantidad>1?'s':''} · ${bs(c.total)} · ${esc(c.metodo)}</span><span>Enviada el ${esc(c.fecha)}</span>
+          ${c.estado==='RECHAZADO' ? `<span style="color:var(--arcilla)">Motivo: ${esc(c.obs || 'el pago no pudo verificarse')}. Los números volvieron a estar disponibles.</span>` : ''}
+          ${c.estado==='VALIDADO' ? `<span>Pago confirmado el ${esc(c.revision)}</span>` : ''}
+          ${c.estado==='RESERVADO' && c.vence ? `<span>Si no se valida, los números se liberan el ${esc(c.vence)}.</span>` : ''}
+          ${c.estado==='VENCIDO' ? `<span style="color:var(--arcilla)">La reserva venció sin validarse y los números volvieron a estar disponibles. Si ya pagaste, comunícate con los organizadores.</span>` : ''}</div>
+        <div class="acts"><button class="btn sm ghost" data-act="ver" data-id="${esc(c.id)}" type="button">Ver comprobante</button></div>
+      </article>`).join('')}</div>`;
+}
+
+/* ===================== ADMIN ===================== */
+function cardAdmin(c, conAcciones){
+  return `<article class="card">
+    <header><b>${esc(c.id)}</b>${chip(c.estado)}</header>
+    <div><b>${esc(c.comprador)}</b><div class="meta"><span>Cel. ${esc(c.celular)} · ${esc(c.fecha)}</span></div></div>
+    <div class="chips">${tickets(c.tickets)}</div>
+    <div class="meta"><span>${c.cantidad} ticket${c.cantidad>1?'s':''} · <b style="color:var(--tinta)">${bs(c.total)}</b> · ${esc(c.metodo)}${c.ref ? ' · Op. ' + esc(c.ref) : ''}</span>
+      ${c.vence ? `<span>Se libera el ${esc(c.vence)} si no se valida</span>` : ''}
+      ${c.revision ? `<span>Revisada el ${esc(c.revision)} por ${esc(c.por)}${c.obs ? ' · ' + esc(c.obs) : ''}</span>` : ''}</div>
+    <div class="acts">
+      <button class="btn sm ghost" data-act="ver" data-id="${esc(c.id)}" type="button">Ver comprobante</button>
+      ${c.estado==='VALIDADO' ? `<button class="btn sm accent" data-act="wa" data-id="${esc(c.id)}" type="button">Avisar por WhatsApp</button>` : ''}
+      ${conAcciones ? `<button class="btn sm primary" data-act="validar" data-id="${esc(c.id)}" type="button">Validar pago</button>
+      <button class="btn sm danger" data-act="rechazar" data-id="${esc(c.id)}" type="button">Rechazar</button>` : ''}
+    </div></article>`;
+}
+async function vPend(){
+  $('#view').innerHTML = '<p class="muted">Cargando…</p>';
+  const nav = S.nav;
+  const r = await api.adminCompras(S.token, 'RESERVADO');
+  if (nav !== S.nav) return;
+  S.lista = r.compras;
+  $('#view').innerHTML = `<div class="h-row"><h2>Pagos por validar</h2><span class="muted">${r.compras.length} pendiente${r.compras.length!==1?'s':''}</span></div>` +
+    (r.compras.length ? `<div class="cards">${r.compras.map(c => cardAdmin(c, true)).join('')}</div>`
+      : `<div class="panel empty"><h3>No hay pagos pendientes</h3><p class="muted">Cuando un cliente envíe un comprobante aparecerá aquí.</p></div>`);
+}
+async function vTodas(){
+  $('#view').innerHTML = `<div class="h-row"><h2>Compras</h2></div>
+    <div class="toolbar"><label class="field">Estado<select id="qEstado"><option value="TODOS">Todas</option><option value="RESERVADO">En reserva</option><option value="VALIDADO">Confirmadas</option><option value="RECHAZADO">Rechazadas</option><option value="VENCIDO">Vencidas</option></select></label>
+    <label class="field">Buscar por nombre, celular o ticket<input id="qTxt" style="width:min(320px,80vw)"></label>
+    <button class="btn ghost" id="btnExcel" type="button">Exportar a Excel</button></div>
+    <div id="expOut" class="muted" style="margin-bottom:12px"></div>
+    <div id="lista"></div>`;
+  await cargarLista();
+}
+async function cargarLista(){
+  const nav = S.nav;
+  const r = await api.adminCompras(S.token, $('#qEstado').value);
+  if (nav !== S.nav) return;
+  S.lista = r.compras; drawLista();
+}
+function drawLista(){
+  if (!$('#lista')) return;
+  const q = (($('#qTxt') || {}).value || '').toLowerCase().trim();
+  const l = S.lista.filter(c => !q || (c.comprador + ' ' + c.celular + ' ' + c.tickets + ' ' + c.id).toLowerCase().includes(q));
+  $('#lista').innerHTML = l.length ? `<div class="cards">${l.map(c => cardAdmin(c, c.estado === 'RESERVADO')).join('')}</div>` : '<div class="panel empty"><p class="muted">Sin resultados.</p></div>';
+}
+function vBuscar(){
+  $('#view').innerHTML = `<div class="h-row"><h2>Buscar ticket</h2></div>
+    <section class="panel"><div class="toolbar"><label class="field">Número de ticket<input id="qNum" inputmode="numeric" maxlength="4" placeholder="0001"></label>
+    <button class="btn primary" id="btnBuscar" type="button">Buscar</button></div><div id="qOut"></div></section>`;
+}
+async function buscarTicket(){
+  const nav = S.nav;
+  const r = await api.adminBuscarTicket(S.token, $('#qNum').value);
+  if (nav !== S.nav || !$('#qOut')) return;
+  if (!r.ok) return toast(r.error, 'err');
+  S.lista = r.compra ? [r.compra] : [];
+  const e = { DISPONIBLE:'Disponible', RESERVADO:'En reserva', VENDIDO:'Vendido' }[r.estado] || r.estado;
+  $('#qOut').innerHTML = `<h3 style="margin-bottom:8px">Ticket ${esc(r.numero)}: ${e}</h3>` + (r.compra ? `<div class="cards">${cardAdmin(r.compra, r.compra.estado === 'RESERVADO')}</div>` : '<p class="muted">Nadie lo ha reservado todavía.</p>');
+}
+async function vResumen(){
+  $('#view').innerHTML = '<p class="muted">Cargando…</p>';
+  const nav = S.nav;
+  const r = await api.adminResumen(S.token);
+  if (nav !== S.nav) return;
+  S.resumen = r; pintarTabs();
+  const pct = Math.round(r.vendidos / r.total * 100);
+  $('#view').innerHTML = `<div class="h-row"><h2>Resumen</h2></div>
+    <div class="stats">
+      <div class="stat"><b>${bs(r.recaudado)}</b><span>Recaudado (pagos validados)</span></div>
+      <div class="stat"><b>${bs(r.porConfirmar)}</b><span>Por confirmar</span></div>
+      <div class="stat"><b>${r.vendidos}</b><span>Tickets vendidos</span></div>
+      <div class="stat"><b>${r.reservados}</b><span>Tickets en reserva</span></div>
+      <div class="stat"><b>${r.disponibles}</b><span>Tickets disponibles</span></div>
+      <div class="stat"><b>${r.usuarios}</b><span>Clientes registrados</span></div>
+    </div>
+    <section class="panel" style="margin-top:14px"><b>${pct}% vendido</b><div class="prog" style="background:#E4EAE6"><i style="width:${pct}%"></i></div></section>`;
+}
+async function accion(el){
+  const id = el.dataset.id, a = el.dataset.act;
+  if (a === 'copiar') return copiar(el.dataset.v);
+  if (a === 'quitar') {
+    S.sel.delete(+el.dataset.n); pintarPagoSel();
+    if (!S.sel.size) { $('#dlgPago').close(); drawGrid(); drawBar(); drawPages(); }
+    return;
+  }
+  if (a === 'ver') return run(el, async () => {
+    const r = await api.verComprobante(S.token, id);
+    if (!r.ok) return toast(r.error, 'err');
+    $('#verT').textContent = 'Comprobante ' + id; $('#verImg').src = 'data:' + r.mime + ';base64,' + r.data; $('#dlgVer').showModal();
+  });
+  if (a === 'resetpw') {
+    const c = S.clientes.find(x => x.id === id); if (!c) return;
+    const ok = await ask({ title:'Contraseña temporal', text:'Se creará una contraseña nueva para ' + c.nombre + ' y la anterior dejará de funcionar. Se mostrará una sola vez.', ok:'Generar' });
+    if (!ok) return;
+    return run(el, async () => {
+      const r = await api.adminResetPassword(S.token, id); if (!r.ok) return toast(r.error, 'err');
+      await ask({ title:'Contraseña temporal creada', text:'Contraseña de ' + c.nombre + ':   ' + r.temporal + '   (anótala: no se volverá a mostrar). Entrégasela solo a su titular.', ok:'Entendido' });
+    });
+  }
+  if (a === 'wa') { const c = S.lista.find(x => x.id === id); if (c) window.open(waUrl(c), '_blank', 'noopener'); return; }
+  if (a === 'validar') {
+    const ok = await ask({ title:'Validar pago ' + id, text:'Confirma que el dinero ya llegó a la cuenta. Los tickets pasarán a vendidos y no podrán revertirse desde aquí.', ok:'Validar pago' });
+    if (!ok) return;
+    const comp = S.lista.find(x => x.id === id);
+    return run(el, async () => {
+      const r = await api.adminValidar(S.token, id); if (!r.ok) return toast(r.error, 'err');
+      toast('Pago validado. Tickets confirmados.', 'ok'); await refrescarAdmin();
+      if (comp) {
+        const w = await ask({ title:'Avisar al comprador', text:'Envía a ' + comp.comprador + ' la confirmación de sus tickets por WhatsApp.', ok:'Abrir WhatsApp' });
+        if (w) window.open(waUrl(comp), '_blank', 'noopener');
+      }
+    });
+  }
+  if (a === 'rechazar') {
+    const motivo = await ask({ title:'Rechazar compra ' + id, text:'Los números volverán a estar disponibles para otros compradores.', input:'Motivo (ej. el pago no figura en la cuenta)', ok:'Rechazar', danger:true });
+    if (motivo === null) return;
+    return run(el, async () => { const r = await api.adminRechazar(S.token, id, motivo); if (!r.ok) return toast(r.error, 'err'); toast('Compra rechazada. Números liberados.', 'ok'); await refrescarAdmin(); });
+  }
+}
+async function refrescarAdmin(){
+  S.resumen = await api.adminResumen(S.token);
+  pintarTabs();
+  if (S.tab === 'buscar') return buscarTicket();
+  setTab(S.tab);
+}
+$('#verClose').onclick = () => $('#dlgVer').close();
+
+/* ===================== WhatsApp y Excel ===================== */
+function waUrl(c){
+  let d = String(c.celular || '').replace(/\D/g, '');
+  const p = String(S.info.pais || '591');
+  if (!(d.startsWith(p) && d.length > 8)) d = p + d.replace(/^0+/, '');
+  const vars = { nombre: String(c.comprador || '').split(' ')[0], id: c.id, tickets: c.tickets, total: c.total, rifa: S.info.nombre };
+  const t = String(S.info.waMsg || '').replace(/\{(\w+)\}/g, (_, k) => vars[k] == null ? '' : vars[k]);
+  return 'https://wa.me/' + d + '?text=' + encodeURIComponent(t);
+}
+async function exportarExcel(){
+  const r = await api.adminExportarExcel(S.token);
+  if (!r.ok) return toast(r.error, 'err');
+  const bin = atob(r.data), arr = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+  const blob = new Blob([arr], { type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = r.nombre;
+  document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+  const out = $('#expOut');
+  if (out) out.innerHTML = 'Archivo ' + esc(r.nombre) + ' generado. Si no se descargó, <a href="' + esc(r.url) + '" target="_blank" rel="noopener">ábrelo desde Drive</a>.';
+  toast('Excel generado.', 'ok');
+}
+
+/* ===================== cuenta ===================== */
+function vCuenta(){
+  $('#view').innerHTML = `<div class="h-row"><h2>Mi cuenta</h2></div>
+    <section class="panel" style="max-width:520px">
+      <p style="margin-top:0"><b>${esc((S.user.nombre + ' ' + (S.user.apellido||'')).trim())}</b><br><span class="muted">${esc(S.user.email)}${S.user.celular ? ' · ' + esc(S.user.celular) : ''}</span></p>
+      <h3 style="margin:18px 0 10px;font-size:18px">Cambiar contraseña</h3>
+      <form id="fPass" autocomplete="off">
+        <label class="field">Contraseña actual<input id="cpA" type="password" autocomplete="current-password" required></label>
+        <label class="field">Nueva contraseña<input id="cpN" type="password" autocomplete="new-password" minlength="6" required></label>
+        <button class="btn primary" type="submit">Guardar contraseña</button>
+      </form>
+    </section>`;
+  ojos($('#view'));
+  $('#fPass').addEventListener('submit', e => { e.preventDefault(); const b = e.submitter;
+    run(b, async () => {
+      const r = await api.cambiarPassword(S.token, $('#cpA').value, $('#cpN').value);
+      if (!r.ok) return toast(r.error, 'err');
+      $('#fPass').reset(); toast('Contraseña actualizada.', 'ok');
+    });
+  });
+}
+</script>
+
+</body>
+</html>
